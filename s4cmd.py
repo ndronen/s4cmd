@@ -960,9 +960,9 @@ class S3Handler(object):
     if S3URL.is_valid(dir):
       basepath = S3URL(dir).path
       for f in (f for f in self.s3walk(dir) if not f['is_dir']):
-        if S3URL(f['name']).path == basepath and S3URL(f['name']).path.endswith('/'):
-          continue
         relpath = os.path.relpath(S3URL(f['name']).path, basepath)
+        if relpath == '.':
+            continue
         result.append(relpath)
     else:
       for f in (f for f in self.local_walk(dir) if not os.path.isdir(f)):
